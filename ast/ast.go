@@ -1,3 +1,5 @@
+package ast
+
 import "github.com/hnts/gorilla/token"
 
 type Node interface {
@@ -15,16 +17,16 @@ type Expression interface {
 }
 
 type Program struct {
-	Statement []Statement
+	Statements []Statement
 }
 
 type LetStatement struct {
 	Token token.Token
-	Name *Identifer
+	Name  *Identifer
 	Value Expression
 }
 
-func (ls *LetStatement) statementNode() {}
+func (ls *LetStatement) statementNode()       {}
 func (ls *LetStatement) TokenLiteral() string { return ls.Token.Literal }
 
 type Identifer struct {
@@ -32,12 +34,12 @@ type Identifer struct {
 	Value string
 }
 
-func (i *Identifer) expressionNode {}
-func (i *Identifer) TokenLiteral() string { return ls.Token.Literal }
+func (i *Identifer) expressionNode()      {}
+func (i *Identifer) TokenLiteral() string { return i.Token.Literal }
 
 func (p *Program) TokenLiteral() string {
-	if len(p.Statement) > 0 {
-		return p.Statement[0].TokenLiteral()
+	if len(p.Statements) > 0 {
+		return p.Statements[0].TokenLiteral()
 	}
 	return ""
 }
