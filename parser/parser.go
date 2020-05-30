@@ -1,20 +1,25 @@
 package parser
 
 import (
+	"fmt"
+
 	"github.com/hnts/gorilla/ast"
 	"github.com/hnts/gorilla/lexer"
 	"github.com/hnts/gorilla/token"
 )
 
 type Parser struct {
-	l *lexer.Lexer
-
+	l         *lexer.Lexer
+	errors    []string
 	curToken  token.Token
 	peekToken token.Token
 }
 
 func New(l *lexer.Lexer) *Parser {
-	p := &Parser{l: l}
+	p := &Parser{
+		l:      l,
+		errors: []string{},
+	}
 
 	p.nextToken()
 	p.nextToken()
@@ -60,7 +65,11 @@ func (p *Parser) parseLetStatement() *ast.LetStatement {
 
 	stmt.Name = &ast.Identifer{Token: p.curToken, Value: p.curToken.Literal}
 
-	if !p.expectPeek(token.SEMICOLON) {
+	if !p.expectPeek(token.ASSIGN) {
+		return nil
+	}
+
+	if !p.curTokenIs(token.SEMICOLON) {
 		p.nextToken()
 	}
 
@@ -79,7 +88,19 @@ func (p *Parser) expectPeek(t token.TokenType) bool {
 	if p.peekTokenIs(t) {
 		p.nextToken()
 		return true
-	} else {
-		return false
 	}
+
+	p.peekError(t)
+	return false
+}
+
+func (p *Parser) Errors() []string {
+	return p.errors
+}
+
+func (p *Parser) peekError(t token.TokenType) []string {
+	msg := fmt.Sprintf("expected next token to be %s, got %s instead", t, p.peekToken.Type)
+	p.errors = append(p.errors, msg)
+
+	return p.errors
 }
