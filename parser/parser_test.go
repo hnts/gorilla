@@ -29,7 +29,7 @@ let foobar = 838383;
 	}
 
 	tests := []struct {
-		expectedIdentifer string
+		expectedIdentifier string
 	}{
 		{"x"},
 		{"y"},
@@ -38,7 +38,7 @@ let foobar = 838383;
 
 	for i, tt := range tests {
 		stmt := program.Statements[i]
-		if !testLetStatement(t, stmt, tt.expectedIdentifer) {
+		if !testLetStatement(t, stmt, tt.expectedIdentifier) {
 			return
 		}
 	}
@@ -114,7 +114,7 @@ func checkParserErrors(t *testing.T, p *Parser) {
 	t.FailNow()
 }
 
-func TestIdentiferExpression(t *testing.T) {
+func TestIdentifierExpression(t *testing.T) {
 	input := "foobar;"
 
 	l := lexer.New(input)
@@ -131,9 +131,9 @@ func TestIdentiferExpression(t *testing.T) {
 			program.Statements[0])
 	}
 
-	ident, ok := stmt.Expression.(*ast.Identifer)
+	ident, ok := stmt.Expression.(*ast.Identifier)
 	if !ok {
-		t.Fatalf("exp not *ast.Identifer. got=%T", stmt.Expression)
+		t.Fatalf("exp not *ast.Identifier. got=%T", stmt.Expression)
 	}
 
 	if ident.Value != "foobar" {
@@ -560,9 +560,9 @@ func testIntegerLiteral(t *testing.T, il ast.Expression, value int64) bool {
 }
 
 func testIdentifier(t *testing.T, exp ast.Expression, value string) bool {
-	ident, ok := exp.(*ast.Identifer)
+	ident, ok := exp.(*ast.Identifier)
 	if !ok {
-		t.Errorf("exp not *ast.Identifer. got=%T", exp)
+		t.Errorf("exp not *ast.Identifier. got=%T", exp)
 	}
 
 	if ident.Value != value {

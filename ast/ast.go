@@ -72,24 +72,24 @@ func (es *ExpressionStatement) String() string {
 	return ""
 }
 
-func (i *Identifer) String() string { return i.Value }
+func (i *Identifier) String() string { return i.Value }
 
 type LetStatement struct {
 	Token token.Token
-	Name  *Identifer
+	Name  *Identifier
 	Value Expression
 }
 
 func (ls *LetStatement) statementNode()       {}
 func (ls *LetStatement) TokenLiteral() string { return ls.Token.Literal }
 
-type Identifer struct {
+type Identifier struct {
 	Token token.Token
 	Value string
 }
 
-func (i *Identifer) expressionNode()      {}
-func (i *Identifer) TokenLiteral() string { return i.Token.Literal }
+func (i *Identifier) expressionNode()      {}
+func (i *Identifier) TokenLiteral() string { return i.Token.Literal }
 
 func (p *Program) TokenLiteral() string {
 	if len(p.Statements) > 0 {
